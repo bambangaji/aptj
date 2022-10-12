@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
 import 'card.dart';
 import 'color.dart';
 import 'customText.dart';
@@ -15,18 +14,24 @@ class CustomWidget {
       bool obsecureText = false,
       bool readOnly = false,
       Function()? callback,
-      required TextEditingController controller}) {
+      bool isNumber = false,
+      EdgeInsets padding = const EdgeInsets.only(left: 15),
+      Widget? prefixIcon,
+      TextEditingController? controller}) {
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), color: bgColor),
         child: Padding(
-          padding: EdgeInsets.only(left: Get.height / 30),
+          padding: padding,
           child: TextFormField(
             onTap: callback,
             readOnly: readOnly,
             controller: controller,
+            keyboardType: isNumber ? TextInputType.phone : TextInputType.text,
             obscureText: obsecureText,
             decoration: InputDecoration(
+              prefixIcon: prefixIcon != null ? prefixIcon : null,
+              label: Text(hintText),
               border: inputBorder,
               hintText: hintText,
             ),
@@ -183,4 +188,159 @@ class CustomWidget {
   //           ),
   //   );
   // }
+
+  static Widget ListTileTopUp(
+      {String leadIconLocation = "",
+      required String title,
+      String message = "",
+      required void Function() callBack,
+      double imageWidth = 10,
+      Widget? leadIconFromWidget,
+      Color bgColor = Warna.white,
+      Color iconColor = Warna.softBlack,
+      Color textColor = Warna.softBlack,
+      EdgeInsetsGeometry? padding}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5, bottom: 5),
+      child: GestureDetector(
+        onTap: callBack,
+        child: ListTile(
+          // iconColor: Warna.red,
+          contentPadding: padding != null
+              ? padding
+              : EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+          trailing: Icon(
+            Icons.keyboard_arrow_right_outlined,
+            color: Warna.orange,
+            size: Get.width / 15,
+          ),
+          leading: leadIconFromWidget != null
+              ? leadIconFromWidget
+              : leadIconLocation != ""
+                  ? Image.asset(
+                      leadIconLocation,
+                      width: imageWidth == 10 ? Get.width / 13 : imageWidth,
+                    )
+                  : null,
+          shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Warna.silver,
+              ),
+              borderRadius: BorderRadius.circular(10)),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              message != ""
+                  ? Text(
+                      message,
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal, fontSize: 14),
+                    )
+                  : Container()
+            ],
+          ),
+          tileColor: bgColor,
+          textColor: textColor,
+        ),
+      ),
+    );
+  }
+
+  var isOpen = false;
+  Future<bool> closeOverlay() async {
+    return isOpen;
+  }
+
+  customAlert(String content, IconData icon, Color colorBg) {
+    Get.snackbar(
+      "",
+      "",
+      barBlur: 0,
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(0),
+      titleText: Center(
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: CustomText()
+                .titleText(content, textColor: Colors.white, fontSize: 16),
+          ),
+        ),
+      ),
+      backgroundColor: colorBg,
+      icon: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 4, 0, 4),
+        child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(100)),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Icon(
+                icon,
+                color: colorBg,
+                size: 26,
+              ),
+            )),
+      ),
+    );
+    Get.showOverlay(
+        asyncFunction: () => closeOverlay(),
+        loadingWidget: GestureDetector(
+          onTap: (() {
+            Get.back();
+          }),
+          child: Container(
+            height: Get.height,
+            width: Get.width,
+            child: Positioned(
+                top: 0,
+                child: Center(
+                  child: Container(
+                      width: Get.width - 20,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: colorBg,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                  decoration:
+                                      BoxDecoration(color: Colors.white),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Icon(
+                                      icon,
+                                      color: colorBg,
+                                      size: 27,
+                                    ),
+                                  )),
+                              Container(
+                                child: CustomText().titleText(content,
+                                    textColor: Colors.white),
+                              ),
+                              Container(
+                                  decoration:
+                                      BoxDecoration(color: Colors.transparent),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Warna.softSilver,
+                                      size: 27,
+                                    ),
+                                  )),
+                            ]),
+                      )),
+                )),
+          ),
+        ));
+  }
 }
