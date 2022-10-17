@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:satgas/component/color.dart';
 
+
 class CustomText {
   Text titleText(String Content,
       {Color textColor = Warna.hitam,
@@ -18,12 +19,9 @@ class CustomText {
   }
 
   Text titleTextWithoutBold(String Content,
-      {Color textColor = Warna.hitam,
-      double fontSize = 14,
-      TextAlign textAlign = TextAlign.start}) {
+      {Color textColor = Warna.hitam, double fontSize = 14}) {
     return Text(
       Content,
-      textAlign: textAlign,
       style: TextStyle(
           color: textColor, fontWeight: FontWeight.normal, fontSize: fontSize),
     );
