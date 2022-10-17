@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:satgas/component/color.dart';
-import 'package:satgas/component/localNotification.dart';
 import 'package:satgas/main_bindings.dart';
 import 'package:satgas/pages/dashboard/view/dashboardPage.dart';
 import 'package:satgas/pages/login/view/LoginPage.dart';
+
 
 void main() async {
   // String fileName = '.env-develop';
@@ -25,9 +24,7 @@ void main() async {
   //   // );
   // }
   initializeDateFormatting();
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await localNotificatonCustom().initializeNotification();
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
@@ -65,7 +62,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       initialBinding: MainBinding(),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/dashboard',
       routes: {
         '/': (context) => LoginPage(),
         '/dashboard': (context) => DashboardPage(), //
